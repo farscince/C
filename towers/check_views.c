@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include "ft.h"
 
-bool		check_views(int v1, int v2, char *array)
+bool		check_views(char v1, char v2, char *array)
 {
 	int i;
 	int k;
@@ -40,7 +40,7 @@ bool		check_views(int v1, int v2, char *array)
 		}
 		i++;
 	}
-	return (((k == v1) && (k_rev == v2)) ? True : False);
+	return (((k == (v1 - '0')) && (k_rev == (v2 - '0'))) ? True : False);
 }
 
 
@@ -48,5 +48,5 @@ bool		check_views(int v1, int v2, char *array)
 // {
 // 	int k;
 
-// 	printf("%d\n", check_views(3, 2, "1243"));
+// 	printf("%d\n", check_views('3', '3', "1243"));
 // }

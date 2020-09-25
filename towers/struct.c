@@ -1,25 +1,46 @@
 #include "ft.h"
 
-
-t_list		*create_node(char **arr, int id)
+t_list		*create_upper_node(int id)
 {
 	t_list *p;
-	printf("node creating...\n");
+	printf("upper node creating...\n");
 	p = (t_list *)malloc(sizeof(t_list));
-	p->var_list = arr;
-	p->id = id;
+	p->id = id < N ? id : id - N;
+	p->is_row = id < N ? False : True;
 	p->next = NULL;
+	p->down = NULL;
+	p->size = 0;
 	return (p);
 }
 
-void		push(t_list **p, char **arr, int id)
+t_variety	*create_lower_node(char *data)
+{
+	t_variety *p;
+	// printf("lower node creating...\n");
+	p = (t_variety *)malloc(sizeof(t_variety));
+	p->down = NULL;
+	p->var = data;
+	return (p);
+}
+
+void		push_up(t_list **p, int id)
 {
 	printf("add to front...\n");
 	t_list	*copy_p;
 
-	copy_p = create_node(arr, id);
+	copy_p = create_upper_node(id);
 	copy_p->next = (*p); // <=> (*copy_p).next = *p
 	*p = copy_p;
+}
+
+void			push_down(t_list **p, char *data, int id)
+{
+	// printf("add node down with data %s...\n", data);
+	t_variety	*low_node;
+	low_node = create_lower_node(data);
+	low_node->down = (*p)->down; // <=> (*copy_p).next = *p
+	low_node->id = id;
+	(*p)->down = low_node;
 }
 
 void		shift(t_list **head, char **arr, int id)
@@ -27,7 +48,7 @@ void		shift(t_list **head, char **arr, int id)
 	t_list	*new_node;
 	t_list	*tmp;
 
-	new_node = create_node(arr, id);
+	new_node = create_upper_node(id);
 	if (*head == NULL)
 		*head = new_node;
 	else
@@ -38,10 +59,25 @@ void		shift(t_list **head, char **arr, int id)
 		tmp->next = new_node;
 	}
 }
+int				depth_of(t_variety *head)
+{
+	// printf("depth of node...\n");
+	t_variety	*tmp;
+	int			i;
+
+	tmp = head;
+	i = 0;
+	while(tmp != NULL)
+	{
+		i++;
+		tmp = tmp->down;
+	}
+	return (i);
+}
 
 int			length_of(t_list *head)
 {
-	printf("size of...\n");
+	printf("size of rows...\n");
 	t_list *tmp;
 	int		i;
 
@@ -74,7 +110,7 @@ void		fill_arr(char **arr, char **generator)
 	free_mem_char_arr(generator, FACT);
 }
 
-t_list		*create_struct(char **views_arr)
+t_list		*create_up_struct(int rang)
 {
 	t_list	*p;
 	t_list	*cp;
@@ -82,18 +118,14 @@ t_list		*create_struct(char **views_arr)
 	char	**arr;
 
 	p = NULL;
-	printf("struct creating...\n");
-	ft_showmatrix(views_arr, 2, 8);
-	i = 0;
-	while(i < N * 2)
+	printf("upper struct creating...\n");
+	i = -1;
+	while(++i < N * 2)
 	{
-		// arr = get_mem_for_char_arr(N, FACT);
-		// fill_arr(arr, generator(N))
-		push(&p, arr, i);
-		i++;
+		push_up(&p, i);	
 	}
 	cp = p;
-	//printf("size = %d\n", length_of(cp));
+	printf("size = %d\n", length_of(cp));
 	while (cp)
 	{
 		// printf("check %d\n", *cp);
@@ -102,43 +134,55 @@ t_list		*create_struct(char **views_arr)
 	}
 	printf("...get here\n");
 	return (p);
+
 }
 
+t_list		*create_struct(char **views_arr)
+{
+	t_list	*p;
+	t_list	*cp;
+	int		i;
+	char	**arr;
+	int		j;
 
-// t_list		*create_node(char *data)
-// {
-// 	t_list *p;
+	p = create_up_struct(N);
+	printf("struct creating...\n");
+	ft_showmatrix(views_arr, 2, 8);
+	i = N * 2;
+	j = -1;
+	cp = p;
+	arr = ft_variants(N);
+	ft_showmatrix(arr, N, ft_factorial(N));
+	while(--i >= 0)
+	{
+		printf("NODE = %d\n", i);
+		printf("checked by v1= %c v2= %c\n", views_arr[i][0], views_arr[i][1]);
+		while (++j < ft_factorial(N))
+		{
+			if (check_views(views_arr[i][0], views_arr[i][1], arr[j]))
+			{
+				printf("%s\n", arr[j]);
+			
+				push_down(&cp, arr[j], cp->size);
+				cp->size++;
+			}
+		}
+		printf("depth = %d\n", depth_of(cp->down));	
+		printf("size = %d\n", cp->size);	
+		cp = cp->next;
+		j = -1;
+		printf("==============\n\n");
+	}
 	
-// 	p = (t_list *)malloc(sizeof(t_list));
-// 	p->data = data;
-// 	p->next = 0;
-// 	return (p);
-// }
-
-// void		push(t_list **p, char *data)
-// {
-// 	t_list	*copy_p;
-
-// 	copy_p = create_node(data);
-// 	copy_p->next = (*p); // <=> (*copy_p).next = *p
-// 	*p = copy_p;
-// }
-
-// t_list		*create_struct(char **views_arr)
-// {
-// 	views_arr = views_arr;
-
-// 	t_list	*p;
-// 	t_list	arr[2];
-	
-// 	push(&p, "to_front1");
-// 	push(&p, "to_front2");
-// 	push(&p, "to_front3");
-// 	while (p)
-// 	{
-// 		printf("%s\n", p->data);
-// 		p = p->next;
-// 	}
-// 	return (p);
-	
-// }
+	cp = p;
+	//printf("size = %d\n", length_of(cp));
+	while (cp)
+	{
+		// printf("check %d\n", *cp);
+		printf("%d\n", cp->id);
+		cp = cp->next;
+	}
+	free_mem_char_arr(arr, ft_factorial(N));
+	printf("...check\n");
+	return (p);
+}

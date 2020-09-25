@@ -15,7 +15,6 @@
 void		ft_putstr(char *str);
 // void		ft_showmatrix(char **arr, int x, int y);
 // int			check_views(int v1, int v2, char *arr);
-char		**ft_variants(char **arr);
 
 char		**ft_create_arr(int x, int y)
 {

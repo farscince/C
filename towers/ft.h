@@ -12,30 +12,30 @@ typedef enum e_bool
 	True
 }			bool;
 
-typedef struct 		s_list
-{
-	struct s_list	*next;
-	struct s_list	*down;
-	char			**var_list;
-	char			*data;
-	int				id;
-	int				size;
-}					t_list;
-
 typedef struct		s_var
 {
 	struct s_var	*down;
 	char			*var;
+	int				id;
 }					t_variety;
 
+typedef struct 		s_list
+{
+	struct s_list	*next;
+	t_variety		*down;
+	bool			is_row;
+	int				id;
+	int				size;
+}					t_list;
 
 void		ft_putstr(char *str);
 void		ft_showmatrix(char **arr, int x, int y);
-bool		check_views(int v1, int v2, char *arr);
-char		**ft_variants(char **arr);
+char		**ft_variants(int rang);
 t_list		*create_struct(char **views_arr);
-int			is_valid_map(t_list **p, char **res_arr);
+bool			is_valid_map(t_list **p, char **res_arr);
+bool		check_views(char v1, char v2, char *array);
 char		**get_mem_for_char_arr(int x, int y);
 void		free_mem_char_arr(char **arr, int y);
+int			ft_factorial(int n);
 
 #endif
