@@ -32,10 +32,13 @@ void		ft_putstr(char *str);
 void		ft_showmatrix(char **arr, int x, int y);
 char		**ft_variants(int rang);
 t_list		*create_struct(char **views_arr);
-bool			is_valid_map(t_list **p, char **res_arr);
+bool		is_valid_map(t_list **p);
 bool		check_views(char v1, char v2, char *array);
 char		**get_mem_for_char_arr(int x, int y);
 void		free_mem_char_arr(char **arr, int y);
 int			ft_factorial(int n);
+void		struct_foreach(t_list **head, int (*f)(t_list **));
+void		pop_node(t_list **p);
+int			length_of(t_list *head);
 
 #endif

@@ -1,18 +1,22 @@
 #include "ft.h"
 
-bool		is_valid_struct(t_list **p)
+int			check_struct_depths(t_list **p)
 {
 	t_list	*cp;
+	int		max_depth;
 
+	max_depth = 1;
 	cp = *p;
 	while (cp)
 	{
-		printf("%d\n", cp->size);
 		if (cp->size == 0)
-			return (False);
+			return (-1);
+		if (cp->size > max_depth)
+			max_depth = cp->size;
 		cp = cp->next;
 	}
-	return (True);
+	printf("max is: %d\n", max_depth);
+	return (max_depth);
 }
 
 void			scan_deep_struct(t_variety *head)
@@ -73,6 +77,19 @@ t_variety		*shift_node(t_list **p, t_variety *del_node)
 	return (prev->down);
 }
 
+void			pop_node(t_list **p)
+{
+	t_variety	*tmp;
+
+	tmp = (*p)->down;
+	if (tmp != NULL)
+	{
+		(*p)->down = tmp->down;
+		free(tmp);
+		(*p)->size--;
+	}
+}
+
 
 int				ft_check_line_crosses(t_list **col, t_list **row)
 {
@@ -116,6 +133,24 @@ int				ft_check_line_crosses(t_list **col, t_list **row)
 
 }
 
+void			struct_foreach(t_list **head, int (*f)(t_list **))
+{
+	t_list		*tmp;
+	int			stop_flag;
+	// printf("iterator\n");
+	tmp = *head;
+	stop_flag = 0;
+	while (tmp)
+	{
+		stop_flag = (*f)(&tmp);
+		if (stop_flag < 0)
+			return ;
+		tmp = tmp->next;
+	}
+	// printf("iterator1111\n");
+}
+
+
 int				ft_filt_struct_self(t_list **p)
 {
 	int			counter;
@@ -148,28 +183,42 @@ int				ft_filt_struct_self(t_list **p)
 	return (0);
 }
 
-bool		is_valid_map(t_list **p, char **res_arr)
+bool		is_valid_map(t_list **p)
 {
 	t_list	*cp;
 	int		is_changed;
+	int		max_depth;
 
 	is_changed = 1;
+	if (check_struct_depths(p) < 0)
+		return (False);
 	cp = *p;
-	while (cp)
-	{
-		printf("id - %d depth %d, is_row %d\n", cp->id, cp->size, cp->is_row);
-		cp = cp->next;
-	}
-
-	if (!is_valid_struct(p))
+	while (is_changed - ft_filt_struct_self(p))
+		is_changed = ft_filt_struct_self(p);
+	max_depth = check_struct_depths(p);
+	if (max_depth < 0)
 	{
 		printf("0-size node detected...\n");
 		return (False);
 	}
-
-	cp = *p;
-	//printf("size = %d\n", length_of(cp));
-	while (is_changed - ft_filt_struct_self(p))
-		is_changed = ft_filt_struct_self(p);
-	return (True);
+	else if (max_depth == 1)
+		return (True);
+	else if (max_depth > 1)
+	{
+		cp = *p;
+		while (cp)
+		{
+			if (cp->size == max_depth)
+			{
+				while(cp->size != 1)
+				{
+					pop_node(&cp);
+					printf("size is %d\n", cp->size);
+				}
+				is_valid_map(p);
+				break ;
+			}
+			cp = cp->next;
+		}
+	}
 }

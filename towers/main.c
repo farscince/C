@@ -128,15 +128,50 @@ char		**split_views(int x, int y, char *str)
 	return (arr);
 }
 
+int			clear_struct(t_list **p)
+{	
+	t_list	*cp;
+
+	cp = *p;
+	if (cp->next == NULL)
+	{
+		if (cp->is_row)
+			printf("%s\n", cp->down->var);
+		while(cp->size)
+			pop_node(p);
+		free(p);
+		*p = NULL;
+		return (-1);
+	}
+	if (cp->next->next == NULL)
+	{
+		if (cp->next->is_row)
+			printf("%s\n", cp->next->down->var);
+		while(cp->next->size)
+			pop_node(&(cp->next));
+		free(cp->next);
+		cp->next = NULL;
+		return (-1);
+	}
+	return (1);
+}
+
+
+int				print_node(t_list **p)
+{
+	printf("id is %d\n", (*p)->id);
+	// if ((*p)->id == 1)
+	// 	return (-1);
+	return (1);
+}
+
 int			main(int argc, char **argv)
 {
-	char 	**res_arr;
 	char	**views_arr;
 
 	t_list	*p;
-	int		result;
+	int		i;
 
-	res_arr = NULL;
 	if (argc == 2)
 	{
 		printf("argc == 2\n");
@@ -146,10 +181,12 @@ int			main(int argc, char **argv)
 			views_arr = split_views(2, N * 2,argv[1]);
 			ft_showmatrix(views_arr, 2, 8);
 			p = create_struct(views_arr);
-			if (is_valid_map(&p, res_arr))
+			if (is_valid_map(&p))
 			{
-				ft_showmatrix(res_arr, N, N);
-				//clear_malloc(p, res_arr, views_arr);
+				i = N * 2;
+				while(--i >= 0)
+					struct_foreach(&p, &clear_struct);
+				printf("%d\n", *p);
 				return (0);
 			}
 		}
