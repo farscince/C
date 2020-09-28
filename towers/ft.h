@@ -39,6 +39,7 @@ void		free_mem_char_arr(char **arr, int y);
 int			ft_factorial(int n);
 void		struct_foreach(t_list **head, int (*f)(t_list **));
 void		pop_node(t_list **p);
-int			length_of(t_list *head);
+int			scan_struct(t_list **head);
+int			check_struct_depths(t_list **p);
 
 #endif

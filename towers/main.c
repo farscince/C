@@ -12,39 +12,11 @@
 
 #include "ft.h"
 
-void		ft_putstr(char *str);
-// void		ft_showmatrix(char **arr, int x, int y);
-// int			check_views(int v1, int v2, char *arr);
-
-char		**ft_create_arr(int x, int y)
-{
-	printf("create arr %dx%d\n", x, y);
-	char	**arr;
-	int		j;
-
-	j = 0;
-	if (y == 1)
-	{
-		arr = (char **)malloc(sizeof(char *));
-	}
-	arr = (char **)malloc(y * sizeof(char *));
-	while (j < y)
-	{
-		arr[j] = (char *)malloc(x * sizeof(char));
-		j++;
-	}
-	return (arr);
-}
-
 int			is_valid_str(char *str)
 {
-	printf("validation...\n");
-	int 	i;
-	int 	j;
-	int 	k;
+	int		i;
 
 	i = 0;
-	j = 0;
 	while (str[i] != 0)
 	{
 		if ((i % 2 == 1) && str[i] != 32)
@@ -54,73 +26,24 @@ int			is_valid_str(char *str)
 		i++;
 	}
 	if (i != (N * 4 * 2 - 1))
-		return (-4);	
-	// i = 0;
-	// k = 0;
-	// while(str[i])
-	// {
-	// 	if (((i < 7) || (i > 15 && i < 23)) && (i % 2 == 0))
-	// 	{
-	// 		k = str[i] + str[i + 8];
-	// 		if (k < '3' || k > ('1' + N))
-	// 			return (0);
-	// 	}
-	// 	i++;
-	// }
+		return (-4);
 	return (1);
 }
 
-// int			ft_count_list(char **generator, int v1, int v2, int *p)
-// {
-// 	int		j;
-// 	int		counter;;
-
-// 	counter = 0;
-// 	j = 0;
-// 	while (j < 24)
-// 	{
-// 		if (check_views(v1, v2, generator[j]) == 1)
-// 		{
-// 			p = &j;
-// 			counter++;
-// 		}
-// 		j++;
-// 	}
-// 	return (counter);
-// }
-
 char		**split_views(int x, int y, char *str)
 {
-	printf("split views...\n");
 	char	**arr;
 	int		i;
-	int		j;
 
 	i = 0;
-	arr = ft_create_arr(x, y);
+	arr = get_mem_for_char_arr(x, y);
 	while (str[i])
 	{
 		if (i % 2 == 0)
 		{
-			// printf("i = %d str[i] = %c\n", i, str[i]);
-			// if (i < N * 2)
-			// {
-
-			// 	printf("1arr[%d][0] = %c\n", i/2, str[i]);
-			// 	arr[i / 2][0] = str[i];
-			(i < N * 2)? arr[i / 2][0] = str[i] : 0;
-			// }
-			// if (N * 2 <= i && i < N * 4)
-			// {
-			// 	printf("2arr[%d][1] = %c\n", i/2 - N, str[i]);
-			// 	arr[i / 2 - N][1] = str[i];
-			// }
+			(i < N * 2) ? arr[i / 2][0] = str[i] : 0;
 			(N * 2 <= i && i < N * 4) ? arr[i / 2 - N][1] = str[i] : 0;
-			// if (N * 4 <= i && i < N * 6)
-				// printf("3arr[%d][0] = %c\n", i/2 - N, str[i]);
 			(N * 4 <= i && i < N * 6) ? arr[i / 2 - N][0] = str[i] : 0;
-			// if (N * 6 <= i) 
-			// 	printf("4arr[%d][1] = %c\n", i/2 - N*2, str[i]);
 			(N * 6 <= i) ? arr[i / 2 - N * 2][1] = str[i] : 0;
 		}
 		i++;
@@ -129,7 +52,7 @@ char		**split_views(int x, int y, char *str)
 }
 
 int			clear_struct(t_list **p)
-{	
+{
 	t_list	*cp;
 
 	cp = *p;
@@ -137,7 +60,7 @@ int			clear_struct(t_list **p)
 	{
 		if (cp->is_row)
 			printf("%s\n", cp->down->var);
-		while(cp->size)
+		while (cp->size)
 			pop_node(p);
 		free(p);
 		*p = NULL;
@@ -147,7 +70,7 @@ int			clear_struct(t_list **p)
 	{
 		if (cp->next->is_row)
 			printf("%s\n", cp->next->down->var);
-		while(cp->next->size)
+		while (cp->next->size)
 			pop_node(&(cp->next));
 		free(cp->next);
 		cp->next = NULL;
@@ -156,41 +79,29 @@ int			clear_struct(t_list **p)
 	return (1);
 }
 
-
-int				print_node(t_list **p)
-{
-	printf("id is %d\n", (*p)->id);
-	// if ((*p)->id == 1)
-	// 	return (-1);
-	return (1);
-}
-
 int			main(int argc, char **argv)
 {
 	char	**views_arr;
-
 	t_list	*p;
 	int		i;
 
-	if (argc == 2)
+	if (argc == 2 && (is_valid_str(argv[1]) == 1))
 	{
-		printf("argc == 2\n");
-		if (is_valid_str(argv[1]) == 1)
+		views_arr = split_views(2, N * 2, argv[1]);
+		ft_showmatrix(views_arr, 2, 8);
+		p = create_struct(views_arr);
+		if (check_struct_depths(&p) < 0)
 		{
-			printf(" str is valid\n");
-			views_arr = split_views(2, N * 2,argv[1]);
-			ft_showmatrix(views_arr, 2, 8);
-			p = create_struct(views_arr);
-			if (is_valid_map(&p))
-			{
-				i = N * 2;
-				while(--i >= 0)
-					struct_foreach(&p, &clear_struct);
-				printf("%d\n", *p);
-				return (0);
-			}
+			ft_putstr("Error");
+			return (-1);
+		}
+		if (is_valid_map(&p))
+		{
+			i = N * 2;
+			while (--i >= 0)
+				struct_foreach(&p, &clear_struct);
+			return (0);
 		}
 	}
 	ft_putstr("Error");
-	return (0);
 }

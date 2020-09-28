@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "ft.h"
 
 int			ft_factorial(int n)

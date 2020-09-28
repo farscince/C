@@ -21,12 +21,12 @@ bool		check_views(char v1, char v2, char *array)
 	int max;
 	int max_rev;
 
-	i = 1;
+	i = 0;
 	k = 1;
 	k_rev = 1;
 	max = array[0];
 	max_rev = array[3];
-	while (i < 4)
+	while (i++ < 4)
 	{
 		if (array[i] > max)
 		{
@@ -35,18 +35,9 @@ bool		check_views(char v1, char v2, char *array)
 		}
 		if (array[3 - i] > max_rev)
 		{
-			max_rev =  array[3 - i];
+			max_rev = array[3 - i];
 			k_rev++;
 		}
-		i++;
 	}
 	return (((k == (v1 - '0')) && (k_rev == (v2 - '0'))) ? True : False);
 }
-
-
-// int main(void)
-// {
-// 	int k;
-
-// 	printf("%d\n", check_views('3', '3', "1243"));
-// }

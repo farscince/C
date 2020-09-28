@@ -12,7 +12,7 @@
 
 #include "ft.h"
 
-char	**ft_add_variants(char **arr)
+char		**ft_add_variants(char **arr)
 {
 	arr[0] = "4123";
 	arr[1] = "4132";
@@ -25,9 +25,10 @@ char	**ft_add_variants(char **arr)
 	return (arr);
 }
 
-char	**ft_variants(int rang)
+char		**ft_variants(int rang)
 {
-	char **arr;
+	char	**arr;
+
 	arr = get_mem_for_char_arr(rang, ft_factorial(rang));
 	arr = ft_add_variants(arr);
 	arr[8] = "1243";
