@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include "ft.h"
 
-bool		check_views(char v1, char v2, char *array)
+bool		check_views(char v1, char v2, char *array, int rang)
 {
 	int i;
 	int k;
@@ -25,17 +25,17 @@ bool		check_views(char v1, char v2, char *array)
 	k = 1;
 	k_rev = 1;
 	max = array[0];
-	max_rev = array[3];
-	while (i++ < 4)
+	max_rev = array[rang - 1];
+	while (i++ < rang)
 	{
 		if (array[i] > max)
 		{
 			max = array[i];
 			k++;
 		}
-		if (array[3 - i] > max_rev)
+		if (array[rang - 1 - i] > max_rev)
 		{
-			max_rev = array[3 - i];
+			max_rev = array[rang - 1 - i];
 			k_rev++;
 		}
 	}

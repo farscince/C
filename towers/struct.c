@@ -36,37 +36,34 @@ void			push_down(t_list **p, char *data, int id)
 {
 	t_variety	*low_node;
 
+	printf("data %s\n", data);
 	low_node = create_lower_node(data);
 	low_node->down = (*p)->down;
 	low_node->id = id;
 	(*p)->down = low_node;
 }
 
-t_list			*create_struct(char **views_arr)
+t_list			*create_struct(char **views_arr, char **arr, int rang)
 {
 	t_list		*p;
 	t_list		*cp;
 	int			i;
-	char		**arr;
 	int			j;
 
 	p = NULL;
 	i = -1;
-	while (++i < N * 2)
+	while (++i < rang * 2)
 		push_up(&p, i);
-	i = N * 2;
+	i = rang * 2;
 	j = -1;
 	cp = p;
-	arr = ft_variants(N);
-	ft_showmatrix(arr, N, ft_factorial(N));
 	while (--i >= 0)
 	{
-		while (++j < ft_factorial(N))
-			if (check_views(views_arr[i][0], views_arr[i][1], arr[j]))
+		while (++j < ft_factorial(rang))
+			if (check_views(views_arr[i][0], views_arr[i][1], arr[j], rang))
 				push_down(&cp, arr[j], cp->size++);
 		cp = cp->next;
 		j = -1;
 	}
-	free_mem_char_arr(arr, ft_factorial(N));
 	return (p);
 }

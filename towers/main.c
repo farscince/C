@@ -21,7 +21,7 @@ int			is_valid_str(char *str)
 	{
 		if ((i % 2 == 1) && str[i] != 32)
 			return (-2);
-		if ((i % 2 == 0) && (str[i] < 49 || str[i] > 52))
+		if ((i % 2 == 0) && (str[i] < 49 || str[i] > (49 + N)))
 			return (-3);
 		i++;
 	}
@@ -51,6 +51,20 @@ char		**split_views(int x, int y, char *str)
 	return (arr);
 }
 
+void		ft_putstr_space(char *str)
+{
+	int		j;
+
+	j = 0;
+	while (str[j])
+	{
+		write(1, &str[j], 1);
+		str[j + 1] ? write(1, " ", 1) : 0;
+		j++;
+	}
+	write(1, "\n", 1);
+}
+
 int			clear_struct(t_list **p)
 {
 	t_list	*cp;
@@ -59,7 +73,7 @@ int			clear_struct(t_list **p)
 	if (cp->next == NULL)
 	{
 		if (cp->is_row)
-			printf("%s\n", cp->down->var);
+			ft_putstr_space(cp->down->var);
 		while (cp->size)
 			pop_node(p);
 		free(p);
@@ -69,7 +83,7 @@ int			clear_struct(t_list **p)
 	if (cp->next->next == NULL)
 	{
 		if (cp->next->is_row)
-			printf("%s\n", cp->next->down->var);
+			ft_putstr_space(cp->next->down->var);
 		while (cp->next->size)
 			pop_node(&(cp->next));
 		free(cp->next);
@@ -81,27 +95,28 @@ int			clear_struct(t_list **p)
 
 int			main(int argc, char **argv)
 {
-	char	**views_arr;
 	t_list	*p;
 	int		i;
+	char	**views_arr;
+	char	**permutations;
+	bool	is_done;
 
+	is_done = False;
 	if (argc == 2 && (is_valid_str(argv[1]) == 1))
 	{
 		views_arr = split_views(2, N * 2, argv[1]);
-		ft_showmatrix(views_arr, 2, 8);
-		p = create_struct(views_arr);
-		if (check_struct_depths(&p) < 0)
-		{
-			ft_putstr("Error");
-			return (-1);
-		}
+		ft_showmatrix(views_arr, 2, N * 2);
+		permutations = ft_variants(N);
+		p = create_struct(views_arr, permutations, N);
 		if (is_valid_map(&p))
 		{
 			i = N * 2;
 			while (--i >= 0)
 				struct_foreach(&p, &clear_struct);
-			return (0);
+			is_done = True;
 		}
+		free_mem_char_arr(views_arr, N * 2);
+		free_mem_char_arr(permutations, ft_factorial(N));
 	}
-	ft_putstr("Error");
+	!is_done ? ft_putstr("Error") : 0;
 }

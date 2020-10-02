@@ -12,9 +12,21 @@
 
 #include <unistd.h>
 
-void	ft_putstr(char *str)
+int			ft_strlen(char *str)
 {
-	int j;
+	int		j;
+
+	j = 0;
+	while (str[j] != '\0')
+	{
+		j++;
+	}
+	return (j);
+}
+
+void		ft_putstr(char *str)
+{
+	int		j;
 
 	j = 0;
 	while (str[j] != '\0')
@@ -22,4 +34,27 @@ void	ft_putstr(char *str)
 		write(1, &str[j], 1);
 		j++;
 	}
+}
+
+void		swap(char *x, char *y)
+{
+	char	temp;
+
+	temp = *x;
+	*x = *y;
+	*y = temp;
+}
+
+char		*ft_strcpy(char *dest, char *str)
+{
+	int		j;
+
+	j = 0;
+	while (str[j] != '\0')
+	{
+		dest[j] = str[j];
+		j++;
+	}
+	dest[j] = '\0';
+	return (dest);
 }

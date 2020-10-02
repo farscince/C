@@ -12,40 +12,53 @@
 
 #include "ft.h"
 
-char		**ft_add_variants(char **arr)
+int			next_perm(char *a, int n)
 {
-	arr[0] = "4123";
-	arr[1] = "4132";
-	arr[2] = "4213";
-	arr[3] = "4231";
-	arr[4] = "4312";
-	arr[5] = "4321";
-	arr[6] = "1423";
-	arr[7] = "1432";
-	return (arr);
+	int		i;
+	int		k;
+	int		t;
+
+	k = n - 2;
+	while ((a[k] > a[k + 1]) && (k >= 0))
+		if (--k < 0)
+			break ;
+	if (k == -1)
+		return (0);
+	t = n - 1;
+	while ((a[k] > a[t]) && (t >= k + 1))
+		t--;
+	swap(&a[k], &a[t]);
+	i = k + 1;
+	while (i <= (n + k) / 2)
+	{
+		t = n + k - i;
+		swap(&a[i], &a[t]);
+		i++;
+	}
+	return (i);
 }
 
 char		**ft_variants(int rang)
 {
+	int		i;
+	char	*a;
 	char	**arr;
+	int		j;
 
-	arr = get_mem_for_char_arr(rang, ft_factorial(rang));
-	arr = ft_add_variants(arr);
-	arr[8] = "1243";
-	arr[9] = "1234";
-	arr[10] = "1342";
-	arr[11] = "1324";
-	arr[12] = "2413";
-	arr[13] = "2431";
-	arr[14] = "2143";
-	arr[15] = "2134";
-	arr[16] = "2341";
-	arr[17] = "2314";
-	arr[18] = "3412";
-	arr[19] = "3421";
-	arr[20] = "3142";
-	arr[21] = "3124";
-	arr[22] = "3241";
-	arr[23] = "3214";
+	j = 0;
+	a = (char *)malloc((rang + 1) * sizeof(char));
+	arr = get_mem_for_char_arr(rang + 1, ft_factorial(rang));
+	i = -1;
+	while (++i < rang)
+		a[i] = '0' + i + 1;
+	a[i] = 0;
+	arr[j] = ft_strcpy(arr[j], a);
+	while (next_perm(a, rang))
+	{
+		j++;
+		arr[j] = ft_strcpy(arr[j], a);
+	}
+	ft_showmatrix(arr, rang, ft_factorial(rang));
+	free(a);
 	return (arr);
 }
