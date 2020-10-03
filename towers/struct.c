@@ -36,7 +36,6 @@ void			push_down(t_list **p, char *data, int id)
 {
 	t_variety	*low_node;
 
-	printf("data %s\n", data);
 	low_node = create_lower_node(data);
 	low_node->down = (*p)->down;
 	low_node->id = id;

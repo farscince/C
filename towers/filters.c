@@ -37,6 +37,13 @@ void			pop_node(t_list **p)
 	}
 }
 
+/*
+** put the following string after 'pc = (is_in == False) ?' to show
+** all deleted vars:
+** if (is_in == False)
+** printf("del: %s in %d (is raw %d)\n", pc->var, (*c)->id, (*c)->is_row);
+*/
+
 int				ft_check_line_crosses(t_list **c, t_list **r)
 {
 	t_variety	*pr;
@@ -55,13 +62,16 @@ int				ft_check_line_crosses(t_list **c, t_list **r)
 			(pr->var[(*c)->id] == pc->var[(*r)->id]) ? is_in = True : 0;
 			pr = pr->down;
 		}
-		(is_in == False) ? printf("del: %s in %d (is raw %d)\n", pc->var, (*c)->id, (*c)->is_row) : 0;
 		pc = (is_in == False) ? del_node(c, pc) : pc->down;
 		(is_in == False) ? counter++ : 0;
 		pr = (*r)->down;
 	}
 	return (counter);
 }
+
+/*
+**struct_foreach(p, &scan_struct);
+*/
 
 int				ft_filt_struct_self(t_list **p)
 {
@@ -72,7 +82,6 @@ int				ft_filt_struct_self(t_list **p)
 	counter = 0;
 	cp = *p;
 	rp = *p;
-	struct_foreach(p, &scan_struct);
 	while (rp)
 	{
 		if (rp->is_row)

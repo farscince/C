@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "ft.h"
 
 int				scan_struct(t_list **head)
@@ -48,7 +49,6 @@ int				check_struct_depths(t_list **p)
 			max_depth = cp->size;
 		cp = cp->next;
 	}
-	printf("max is: %d\n", max_depth);
 	return (max_depth);
 }
 

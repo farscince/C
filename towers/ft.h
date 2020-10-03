@@ -1,9 +1,8 @@
 #ifndef FT_H
 # define FT_H
-# define N 6
+# define N 4
 
 #include <unistd.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 typedef enum e_bool
@@ -32,7 +31,6 @@ void		ft_putstr(char *str);
 int			ft_strlen(char *str);
 char		*ft_strcpy(char *dest, char *str);
 void		swap(char *x, char *y);
-void		ft_showmatrix(char **arr, int x, int y);
 char		**ft_variants(int rang);
 t_list		*create_struct(char **views_arr, char **arr, int rang);
 bool		is_valid_map(t_list **p);

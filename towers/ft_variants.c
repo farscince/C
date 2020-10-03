@@ -58,7 +58,6 @@ char		**ft_variants(int rang)
 		j++;
 		arr[j] = ft_strcpy(arr[j], a);
 	}
-	ft_showmatrix(arr, rang, ft_factorial(rang));
 	free(a);
 	return (arr);
 }

@@ -105,7 +105,6 @@ int			main(int argc, char **argv)
 	if (argc == 2 && (is_valid_str(argv[1]) == 1))
 	{
 		views_arr = split_views(2, N * 2, argv[1]);
-		ft_showmatrix(views_arr, 2, N * 2);
 		permutations = ft_variants(N);
 		p = create_struct(views_arr, permutations, N);
 		if (is_valid_map(&p))
